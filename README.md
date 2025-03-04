@@ -1,48 +1,48 @@
 <h1>ParaBank-TestingSuite</h1>
 
-<h2>🎯 Cel projektu</h2>
-<p>Projekt <strong>ParaBank-TestingSuite</strong> służy do testowania aplikacji internetowej 
-<a href="https://parabank.parasoft.com">ParaBank</a>. Obejmuje zarówno <strong>testy manualne</strong>, 
-jak i <strong>testy automatyczne</strong>, które weryfikują kluczowe funkcjonalności systemu bankowego.</p>
+<h2>🎯 Project Goal</h2>
+<p>The <strong>ParaBank-TestingSuite</strong> project is designed to test the 
+<a href="https://parabank.parasoft.com">ParaBank</a> web application. It includes both 
+<strong>manual testing</strong> and <strong>automated testing</strong>, verifying key banking system functionalities.</p>
 
-<h3>📌 Główne cele:</h3>
+<h3>📌 Main Objectives:</h3>
 <ul>
-  <li>Weryfikacja poprawności działania funkcji bankowych, takich jak logowanie, rejestracja i składanie wniosków o pożyczkę.</li>
-  <li>Automatyzacja testów w celu zwiększenia efektywności i powtarzalności testowania.</li>
-  <li>Dokumentacja testów manualnych i automatycznych w osobnych katalogach.</li>
+  <li>Verify the correct functioning of banking features such as login, registration, and loan applications.</li>
+  <li>Automate tests to improve efficiency and repeatability.</li>
+  <li>Document both manual and automated tests in separate directories.</li>
 </ul>
 
 <hr>
 
-<h2>🖥️ Wymagania systemowe</h2>
-<p>Aby uruchomić i rozwijać ten projekt, potrzebujesz:</p>
+<h2>🖥️ System Requirements</h2>
+<p>To run and develop this project, you need:</p>
 
-<h3>✅ Podstawowe wymagania</h3>
+<h3>✅ Basic Requirements</h3>
 <ul>
-  <li><strong>System operacyjny</strong>: Windows, macOS lub Linux</li>
-  <li><strong>Java</strong>: OpenJDK 23.0.2 (zalecana)</li>
-  <li><strong>Maven</strong>: do zarządzania zależnościami</li>
-  <li><strong>Git</strong>: do pobrania kodu źródłowego</li>
+  <li><strong>Operating System</strong>: Windows, macOS, or Linux</li>
+  <li><strong>Java</strong>: OpenJDK 23.0.2 (recommended)</li>
+  <li><strong>Maven</strong>: for dependency management</li>
+  <li><strong>Git</strong>: to clone the source code</li>
 </ul>
 
-<h3>🔧 Dodatkowe wymagania dla testów automatycznych</h3>
+<h3>🔧 Additional Requirements for Automated Tests</h3>
 <ul>
-  <li><strong>Google Chrome</strong> (lub inna wspierana przeglądarka)</li>
-  <li><strong>Chromedriver</strong> (dopasowany do wersji Chrome)</li>
-  <li><strong>Selenium WebDriver</strong>: do obsługi testów przeglądarkowych</li>
-  <li><strong>TestNG</strong>: framework do uruchamiania testów</li>
+  <li><strong>Google Chrome</strong> (or another supported browser)</li>
+  <li><strong>Chromedriver</strong> (matching the Chrome version)</li>
+  <li><strong>Selenium WebDriver</strong>: for browser automation</li>
+  <li><strong>TestNG</strong>: test execution framework</li>
 </ul>
 
 <hr>
 
-<h2>📂 Struktura katalogów</h2>
+<h2>📂 Project Structure</h2>
 <pre>
 ParaBank-TestingSuite/
-  ├── ManualTest/         # Dokumentacja i scenariusze testów manualnych
-  ├── AutomaticTest/      # Testy automatyczne (Selenium + TestNG)
-  ├── Reports/            # Raporty testowe (manualne i automatyczne)
-  ├── .gitignore          # Plik ignorujący zbędne pliki w repozytorium
-  ├── README.md           # Ten plik – główna dokumentacja projektu
+  ├── ManualTest/         # Documentation and manual test scenarios
+  ├── AutomaticTest/      # Automated tests (Selenium + TestNG)
+  ├── Reports/            # Test reports (manual and automated)
+  ├── .gitignore          # File to ignore unnecessary repository files
+  ├── README.md           # This file – main project documentation
 </pre>
 
-<p>Każdy katalog zawiera osobny plik <code>README.md</code> z dokładniejszym opisem jego zawartości.</p>
+<p>Each directory contains its own <code>README.md</code> file with more details about its content.</p>
