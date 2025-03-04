@@ -27,7 +27,6 @@ ParaBankAutomationTest/
 │── pom.xml  # Maven configuration
 │── testng.xml  # TestNG configuration
 │── README.md  # Project documentation
-│── .gitignore  # Git ignored files
 </pre>
 
 <h2>🚀 Running Tests</h2>
