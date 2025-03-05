@@ -1,5 +1,10 @@
 <h1 align="center">ParaBank Automation Test</h1>
 
+<h2>⚠️ Warning</h2>
+<p><strong>Important:</strong> After each test execution, the database is automatically cleaned. 
+As a result, most tests start with user registration. This approach helps <strong>minimize dependencies between tests</strong> 
+and <strong>prevent interference from other users</strong> with database access.</p>
+
 <h2>📌 Project Description</h2>
 <p>This project contains automated tests for the <strong>ParaBank</strong> application, verifying key online banking functionalities. The tests are written in <strong>Java</strong> and utilize <strong>Selenium WebDriver, TestNG, and Page Object Model (POM)</strong>.</p>
 
