@@ -1,0 +1,749 @@
+{
+	"info": {
+		"_postman_id": "42c19a89-00a0-4685-89ef-2928c69cedbc",
+		"name": "Parabank API Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38720783"
+	},
+	"item": [
+		{
+			"name": "Customer",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is in XML format\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/xml\");",
+									"});",
+									"",
+									"var cheerio = require('cheerio');",
+									"var xmlDoc = cheerio.load(pm.response.text(), { xmlMode: true });",
+									"",
+									"pm.test(\"Response contains customer ID\", function () {",
+									"    var id = xmlDoc('id').text();",
+									"    pm.expect(id).to.not.be.empty;",
+									"});",
+									"",
+									"pm.test(\"User details are correct\", function () {",
+									"    var firstName = xmlDoc('firstName').text();",
+									"    var lastName = xmlDoc('lastName').text();",
+									"    ",
+									"    pm.expect(firstName).to.eql(\"John\");",
+									"    pm.expect(lastName).to.eql(\"Smith\");",
+									"});",
+									"",
+									"pm.test(\"Address is correct\", function () {",
+									"    var city = xmlDoc('city').text();",
+									"    var zipCode = xmlDoc('zipCode').text();",
+									"    ",
+									"    pm.expect(city).to.eql(\"Beverly Hills\");",
+									"    pm.expect(zipCode).to.eql(\"90210\");",
+									"});",
+									"",
+									"var customerId = xmlDoc('id').text();",
+									"",
+									"pm.test(\"Customer ID is extracted and stored\", function () {",
+									"    pm.expect(customerId).to.not.be.empty;",
+									"    pm.environment.set(\"customerId\", customerId);",
+									"});",
+									"",
+									"console.log(\"Customer ID:\", customerId);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/login/{{login}}/{{password}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"login",
+								"{{login}}",
+								"{{password}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Account",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.unset(\"SavingAccountId\"); "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var cheerio = require('cheerio');",
+									"var xmlDoc = cheerio.load(pm.response.text(), { xmlMode: true });",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is in XML format\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/xml\");",
+									"});",
+									"",
+									"var account = xmlDoc('account');",
+									"var savingsAccountId = account.find('id').text();",
+									"var customerId = account.find('customerId').text();",
+									"var accountType = account.find('type').text();",
+									"var balance = account.find('balance').text();",
+									"",
+									"pm.test(\"Response contains Savings Account ID\", function () {",
+									"    pm.expect(savingsAccountId).to.not.be.empty;",
+									"});",
+									"",
+									"pm.test(\"Account details are correct\", function () {",
+									"    pm.expect(customerId).to.eql(\"12212\");  ",
+									"    pm.expect(accountType).to.eql(\"SAVINGS\"); ",
+									"});",
+									"",
+									"pm.test(\"Balance is a valid number\", function () {",
+									"    pm.expect(parseFloat(balance)).to.be.a('number');",
+									"});",
+									"",
+									"pm.environment.unset(\"SavingsAccountId\"); ",
+									"pm.environment.set(\"SavingsAccountId\", savingsAccountId);",
+									"",
+									"console.log(\"Savings Account ID set:\", savingsAccountId);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "customerId",
+									"value": "12212",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "newAccountType",
+									"value": "0",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "fromAccountId",
+									"value": "13344",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/createAccount?customerId={{customerId}}&newAccountType=1&fromAccountId={{MainAccountId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"createAccount"
+							],
+							"query": [
+								{
+									"key": "customerId",
+									"value": "{{customerId}}"
+								},
+								{
+									"key": "newAccountType",
+									"value": "1"
+								},
+								{
+									"key": "fromAccountId",
+									"value": "{{MainAccountId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customer Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is in XML format\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/xml\");",
+									"});",
+									"",
+									"var cheerio = require('cheerio');",
+									"var xmlDoc = cheerio.load(pm.response.text(), { xmlMode: true });",
+									"",
+									"pm.test(\"Response contains customer ID\", function () {",
+									"    var id = xmlDoc('id').text();",
+									"    pm.expect(id).to.not.be.empty;",
+									"});",
+									"",
+									"pm.test(\"User details are correct\", function () {",
+									"    var firstName = xmlDoc('firstName').text();",
+									"    var lastName = xmlDoc('lastName').text();",
+									"    ",
+									"    pm.expect(firstName).to.eql(\"John\");",
+									"    pm.expect(lastName).to.eql(\"Smith\");",
+									"});",
+									"",
+									"pm.test(\"Address is correct\", function () {",
+									"    var city = xmlDoc('city').text();",
+									"    var zipCode = xmlDoc('zipCode').text();",
+									"    ",
+									"    pm.expect(city).to.eql(\"Beverly Hills\");",
+									"    pm.expect(zipCode).to.eql(\"90210\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/customers/{{customerId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"customers",
+								"{{customerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List of customer accounts",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.unset(\"MainAccountId\"); "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var cheerio = require('cheerio');",
+									"var xmlDoc = cheerio.load(pm.response.text(), { xmlMode: true });",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is in XML format\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/xml\");",
+									"});",
+									"",
+									"var firstAccount = xmlDoc('account').first();",
+									"var accountId = firstAccount.find('id').text();",
+									"var customerId = firstAccount.find('customerId').text();",
+									"var accountType = firstAccount.find('type').text();",
+									"var balance = firstAccount.find('balance').text();",
+									"",
+									"pm.test(\"Response contains account ID\", function () {",
+									"    pm.expect(accountId).to.not.be.empty;",
+									"});",
+									"",
+									"pm.environment.unset(\"MainAccountId\"); ",
+									"pm.environment.set(\"MainAccountId\", accountId);",
+									"",
+									"console.log(\"Main Account ID set:\", accountId);",
+									"",
+									"pm.test(\"Account details are correct\", function () {",
+									"    pm.expect(customerId).to.eql(\"12212\");",
+									"    pm.expect(accountId).to.eql(accountId);  ",
+									"    pm.expect(accountType).to.eql(\"CHECKING\");",
+									"});",
+									"",
+									"pm.test(\"Balance is a valid number\", function () {",
+									"    pm.expect(parseFloat(balance)).to.be.a('number');",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{host}}/customers/{{customerId}}/accounts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"customers",
+								"{{customerId}}",
+								"accounts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Accounts",
+			"item": [
+				{
+					"name": "Deposit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is in XML format\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/xml\");",
+									"});",
+									"",
+									"var cheerio = require('cheerio');",
+									"var xmlDoc = cheerio.load(pm.response.text(), { xmlMode: true });",
+									"",
+									"var responseMessage = xmlDoc.text();",
+									"var expectedMessage = `Successfully deposited $1000 to account #${pm.environment.get(\"MainAccountId\")}`;",
+									"",
+									"pm.test(\"Response message is correct\", function () {",
+									"    pm.expect(responseMessage.trim()).to.eql(expectedMessage);",
+									"});",
+									"",
+									"pm.test(\"Deposit went to correct account\", function () {",
+									"    pm.expect(responseMessage.includes(`#${pm.environment.get(\"MainAccountId\")}`)).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Deposit amount is correct\", function () {",
+									"    pm.expect(responseMessage.includes(\"$1000\")).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{host}}/deposit?accountId={{MainAccountId}}&amount=1000",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"deposit"
+							],
+							"query": [
+								{
+									"key": "accountId",
+									"value": "{{MainAccountId}}"
+								},
+								{
+									"key": "amount",
+									"value": "1000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Withdraw",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is in XML format\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/xml\");",
+									"});",
+									"",
+									"var cheerio = require('cheerio');",
+									"var xmlDoc = cheerio.load(pm.response.text(), { xmlMode: true });",
+									"",
+									"var responseMessage = xmlDoc.text();",
+									"var expectedMessage = `Successfully withdrew $100 from account #${pm.environment.get(\"MainAccountId\")}`;",
+									"",
+									"pm.test(\"Response message is correct\", function () {",
+									"    pm.expect(responseMessage.trim()).to.eql(expectedMessage);",
+									"});",
+									"",
+									"pm.test(\"Withdrawal came from correct account\", function () {",
+									"    pm.expect(responseMessage.includes(`#${pm.environment.get(\"MainAccountId\")}`)).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Withdraw amount is correct\", function () {",
+									"    pm.expect(responseMessage.includes(\"$100\")).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/withdraw?accountId={{MainAccountId}}&amount=100",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"withdraw"
+							],
+							"query": [
+								{
+									"key": "accountId",
+									"value": "{{MainAccountId}}"
+								},
+								{
+									"key": "amount",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is in XML format\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/xml\");",
+									"});",
+									"",
+									"var cheerio = require('cheerio');",
+									"var xmlDoc = cheerio.load(pm.response.text(), { xmlMode: true });",
+									"",
+									"var responseMessage = xmlDoc.text();",
+									"var expectedMessage = `Successfully transferred $900 from account #${pm.environment.get(\"MainAccountId\")} to account #${pm.environment.get(\"SavingsAccountId\")}`;",
+									"",
+									"pm.test(\"Response message is correct\", function () {",
+									"    pm.expect(responseMessage.trim()).to.eql(expectedMessage);",
+									"});",
+									"",
+									"pm.test(\"Transfer came from correct source account\", function () {",
+									"    pm.expect(responseMessage.includes(`#${pm.environment.get(\"MainAccountId\")}`)).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Transfer went to correct destination account\", function () {",
+									"    pm.expect(responseMessage.includes(`#${pm.environment.get(\"SavingsAccountId\")}`)).to.be.true;",
+									"});",
+									"",
+									"pm.test(\"Transfer amount is correct\", function () {",
+									"    pm.expect(responseMessage.includes(\"$900\")).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/transfer?fromAccountId={{MainAccountId}}&toAccountId={{SavingsAccountId}}&amount=900",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"transfer"
+							],
+							"query": [
+								{
+									"key": "fromAccountId",
+									"value": "{{MainAccountId}}"
+								},
+								{
+									"key": "toAccountId",
+									"value": "{{SavingsAccountId}}"
+								},
+								{
+									"key": "amount",
+									"value": "900"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Loans",
+			"item": [
+				{
+					"name": "Request loan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is in XML format\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/xml\");",
+									"});",
+									"",
+									"var cheerio = require('cheerio');",
+									"var xmlDoc = cheerio.load(pm.response.text(), { xmlMode: true });",
+									"",
+									"var responseDate = xmlDoc(\"responseDate\").text();",
+									"var loanProvider = xmlDoc(\"loanProviderName\").text();",
+									"var approvalStatus = xmlDoc(\"approved\").text();",
+									"var responseMessage = xmlDoc(\"message\").text();",
+									"",
+									"pm.test(\"Response contains loan provider name\", function () {",
+									"    pm.expect(loanProvider).to.not.be.empty;",
+									"});",
+									"",
+									"pm.test(\"Response contains approval status\", function () {",
+									"    pm.expect(approvalStatus).to.not.be.empty;",
+									"});",
+									"",
+									"pm.test(\"Loan is not approved due to insufficient funds\", function () {",
+									"    pm.expect(approvalStatus).to.eql(\"true\");",
+									"});",
+									"",
+									"pm.test(\"Response contains a valid date\", function () {",
+									"    pm.expect(Date.parse(responseDate)).to.not.be.NaN;",
+									"});",
+									"",
+									"console.log(\"Loan Provider:\", loanProvider);",
+									"console.log(\"Approval Status:\", approvalStatus);",
+									"console.log(\"Response Message:\", responseMessage);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/requestLoan?customerId={{customerId}}&amount=5000&downPayment=1000&fromAccountId={{MainAccountId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"requestLoan"
+							],
+							"query": [
+								{
+									"key": "customerId",
+									"value": "{{customerId}}"
+								},
+								{
+									"key": "amount",
+									"value": "5000"
+								},
+								{
+									"key": "downPayment",
+									"value": "1000"
+								},
+								{
+									"key": "fromAccountId",
+									"value": "{{MainAccountId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Database",
+			"item": [
+				{
+					"name": "CleanDB",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});",
+									"",
+									"pm.test(\"Response has no content\", function () {",
+									"    pm.expect(pm.response.text()).to.eql(\"\");",
+									"});",
+									"",
+									"pm.test(\"Response is successful\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+									"});",
+									"",
+									"pm.test(\"Check response headers\", function () {",
+									"    pm.response.to.have.header(\"Connection\");",
+									"});",
+									"",
+									"console.log(\"CleanDB request executed successfully.\")"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/cleanDB",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"cleanDB"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "InitializeDB",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});",
+									"",
+									"pm.test(\"Response has no content\", function () {",
+									"    pm.expect(pm.response.text()).to.eql(\"\");",
+									"});",
+									"",
+									"pm.test(\"Response is successful\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+									"});",
+									"",
+									"pm.test(\"Check response headers\", function () {",
+									"    pm.response.to.have.header(\"Connection\");",
+									"});",
+									"",
+									"console.log(\"InitializeDB request executed successfully.\");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/initializeDB",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"initializeDB"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
