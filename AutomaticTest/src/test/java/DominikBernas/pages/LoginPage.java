@@ -50,6 +50,10 @@ public class LoginPage {
         logoutButton.click();
         return new HomePage(driver);
     }
+    public UpdateContactInfoPage clickUpdateContactInfo() {
+        updateContactInfoLink.click();
+        return new UpdateContactInfoPage(driver);
+    }
 
     public RequestLoanPage clickRequestLoanLink() {
         requestLoanLink.click();
