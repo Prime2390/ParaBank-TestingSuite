@@ -50,3 +50,25 @@ ParaBank-TestingSuite/
 </pre>
 
 <p>Each directory contains its own <code>README.md</code> file with more details about its content.</p>
+
+<h2>🚀 Running Tests</h2>
+<ol>
+  <li><strong>Clone the repository:</strong>
+    <pre>git clone https://github.com/Prime2390/ParaBank-TestingSuite.git
+cd ParaBank-TestingSuite</pre>
+  </li>
+  <li><strong>Navigate to the Automated Tests directory:</strong>
+    <pre>cd AutomaticTest</pre>
+  </li>
+  <li><strong>Install dependencies:</strong>
+    <pre>mvn clean install</pre>
+  </li>
+  <li><strong>Run tests:</strong>
+    <pre>mvn test</pre>
+    Or run specific tests:
+    <pre>mvn test -Dtest=LoginTest</pre>
+  </li>
+</ol>
+
+<h2>📌 Author</h2>
+<p>Project developed by <strong>Dominik Bernas</strong>.</p>
