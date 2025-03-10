@@ -56,7 +56,7 @@
     </ul>
 
     <h3>Screenshot:</h3>
-    <p><img src=https://github.com/Prime2390/ParaBank-TestingSuite/blob/main/ExploratoryTests/HomePage/screenshot_path.png alt="Console Warning Screenshot"></p>
+    <p><img "ExploratoryTests/HomePage/screenshot_path.png" alt="Console Warning Screenshot"></p>
 
     <h2>Summary</h2>
     <p>The ParaBank homepage operates as expected in terms of functionality and content display. 
