@@ -1,3 +1,4 @@
+
     <h1>Exploratory Testing Report – HomePage</h1>
 
     <p><strong>Tester:</strong> Dominik Bernaś</p>
@@ -69,4 +70,3 @@
         <li>✅ Add the <code>autocomplete="current-password"</code> attribute to the password field.</li>
         <li>✅ Verify if the omission of this feature aligns with security policies.</li>
     </ul>
-</body>
