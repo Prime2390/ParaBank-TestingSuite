@@ -8,6 +8,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class UpdateContactInfoPage {
     WebDriver driver;
 
@@ -38,6 +41,9 @@ public class UpdateContactInfoPage {
     @FindBy(xpath = "//div[@id='updateProfileResult']//p")
     private WebElement profileUpdatedMessage;
 
+    @FindBy(className = "error")
+    private List<WebElement> errorMessage;
+
     public UpdateContactInfoPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
@@ -50,6 +56,7 @@ public class UpdateContactInfoPage {
         stateInput.clear();
         zipCodeInput.clear();
         phoneNumberInput.clear();
+
         firstNameInput.sendKeys(registerModelFaker.getFirstName());
         lastNameInput.sendKeys(registerModelFaker.getLastName());
         addressInput.sendKeys(registerModelFaker.getAddress());
@@ -57,11 +64,26 @@ public class UpdateContactInfoPage {
         zipCodeInput.sendKeys(registerModelFaker.getZipCode());
         stateInput.sendKeys(registerModelFaker.getState());
         phoneNumberInput.sendKeys(registerModelFaker.getPhoneNumber());
+        SeleniumWaiter.waitForEnabled(updateProfileButton, driver);
+        updateProfileButton.click();
+        return this;
+    }
+    public UpdateContactInfoPage updateProfilWithoutData() {
+        firstNameInput.clear();
+        lastNameInput.clear();
+        addressInput.clear();
+        cityInput.clear();
+        stateInput.clear();
+        zipCodeInput.clear();
+        phoneNumberInput.clear();
         updateProfileButton.click();
         return this;
     }
     public String updateProfileTitle() {
         new SeleniumWaiter().waitForVisible(profileUpdatedMessage, driver);
         return profileUpdatedMessage.getText();
+    }
+    public List<WebElement> getErrorMessage() {
+        return errorMessage.stream().map(element -> element).collect(Collectors.toList());
     }
 }
