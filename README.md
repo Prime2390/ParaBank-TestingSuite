@@ -23,6 +23,8 @@
   <li><strong>Java</strong>: OpenJDK 23.0.2 (recommended)</li>
   <li><strong>Maven</strong>: for dependency management</li>
   <li><strong>Git</strong>: to clone the source code</li>
+  <li><strong>Postman</strong> – API testing</li>
+  <li><strong>Chrome DevTools</strong> – Debugging, performance monitoring, and network analysis</li>
 </ul>
 
 <h3>🔧 Additional Requirements for Automated Tests</h3>
@@ -40,9 +42,33 @@
 ParaBank-TestingSuite/
   ├── ManualTest/         # Documentation and manual test scenarios
   ├── AutomaticTest/      # Automated tests (Selenium + TestNG)
+  │── ExploratoryTests/   # Exploratory testing
+  │── Parabank-API-Test/  # API testing
   ├── Reports/            # Test reports (manual and automated)
   ├── .gitignore          # File to ignore unnecessary repository files
   ├── README.md           # This file – main project documentation
 </pre>
 
 <p>Each directory contains its own <code>README.md</code> file with more details about its content.</p>
+
+<h2>🚀 Running Tests</h2>
+<ol>
+  <li><strong>Clone the repository:</strong>
+    <pre>git clone https://github.com/Prime2390/ParaBank-TestingSuite.git
+cd ParaBank-TestingSuite</pre>
+  </li>
+  <li><strong>Navigate to the Automated Tests directory:</strong>
+    <pre>cd AutomaticTest</pre>
+  </li>
+  <li><strong>Install dependencies:</strong>
+    <pre>mvn clean install</pre>
+  </li>
+  <li><strong>Run tests:</strong>
+    <pre>mvn test</pre>
+    Or run specific tests:
+    <pre>mvn test -Dtest=LoginTest</pre>
+  </li>
+</ol>
+
+<h2>📌 Author</h2>
+<p>Project developed by <strong>Dominik Bernas</strong>.</p>
